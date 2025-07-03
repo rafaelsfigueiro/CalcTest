@@ -6,24 +6,55 @@ using System.Threading.Tasks;
 
 namespace PlaygroundTeste
 {
-    class ValidarCPFTeste
-    {
-        public class CPFTeste
+    public class ValidarCPFTeste
+    { 
+         
+        public static bool ValidarCPF(string cpf)
         {
-            static Playground.ValidadorCPF _validador;
-            public CPFTeste()
-            {
-                _validador = new Playground.ValidadorCPF();
-            }
+            // Remove caracteres não numéricos
+            cpf = new string(cpf.Where(char.IsDigit).ToArray());
 
-            [Fact]
+            if (cpf.Length != 11 || cpf.Distinct().Count() == 1)
+                return false;
 
-            public static void TestCPF()
-            {
-                _validador.
+            int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
 
-            }
+            string tempCpf = cpf.Substring(0, 9);
+            int soma = 0;
 
-        } 
+            for (int i = 0; i < 9; i++)
+                soma += int.Parse(tempCpf[i].ToString()) * multiplicador1[i];
+
+            int resto = soma % 11;
+            resto = resto < 2 ? 0 : 11 - resto;
+            string digito = resto.ToString();
+
+            tempCpf += digito;
+            soma = 0;
+
+            for (int i = 0; i < 10; i++)
+                soma += int.Parse(tempCpf[i].ToString()) * multiplicador2[i];
+
+            resto = soma % 11;
+            resto = resto < 2 ? 0 : 11 - resto;
+            digito += resto.ToString();
+
+            return cpf.EndsWith(digito);
+        }
+
+        [Fact]
+        public void TestarCPF()
+        {
+            // Arrange
+            string cpfValido = "12345678909";   // CPF válido fictício
+            string cpfInvalido = "12345678900"; // CPF inválido
+
+            // Act & Assert
+            Assert.True(ValidarCPF(cpfValido));
+            Assert.False(ValidarCPF(cpfInvalido));
+        }
     }
+
 }
+
