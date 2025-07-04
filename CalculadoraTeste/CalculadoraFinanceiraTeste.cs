@@ -33,7 +33,7 @@ namespace PlaygroundTeste
 
         }
         [Fact]
-        public void CalculadoraDeJurosSimplesTeste()
+        public void CalculadoraDeJurosZeroTeste()
         {
             //arrange
             decimal capitalInicial = 0;
@@ -48,5 +48,38 @@ namespace PlaygroundTeste
             Assert.Equal(0.00m, resultado);
 
         }
+     //   [Fact]
+     //   public void CalculadoraDeJurosTesteNegativo()
+     //   {
+     //       //arrange
+     //       decimal capitalInicial = -1000;
+     //       decimal taxaJurosMensal = 0.01m; // 5% de juros mensais
+     //       int periodoMeses = 12; // 1 ano
+
+     //       //act
+           
+
+     //       //assert
+
+     //       var excecao = Assert.Throws<ArgumentOutOfRangeException>(() =>
+     //_calculadoraFinanceira.CalcularJurosCompostos(capitalInicial, taxaJurosMensal, periodoMeses)
+     //       );
+
+     //       Assert.Contains("Capital Inválido", excecao.Message, StringComparison.OrdinalIgnoreCase);
+     //   }
+        [Fact]
+        public void TestCalcularJurosCompostosCapitalnegativo()
+        {
+            decimal capitalInicial = -100m;
+            decimal taxaJurosMensal = 0.01m;
+            int periodoMeses = 12;
+
+            var excecao = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                _calculadoraFinanceira.CalcularJurosCompostos(capitalInicial, taxaJurosMensal, periodoMeses)
+            );
+
+            Assert.Contains("capital", excecao.Message, StringComparison.OrdinalIgnoreCase);
+        }
+
     }
 }
