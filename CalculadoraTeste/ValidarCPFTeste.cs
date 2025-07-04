@@ -1,60 +1,79 @@
-﻿using System;
+﻿using Playground;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace PlaygroundTeste
+ 
+ 
+namespace Testes
 {
-    public class ValidarCPFTeste
-    { 
-         
-        public static bool ValidarCPF(string cpf)
+    public class ValidadorCPFTests
+    {
+        private ValidadorCPF _validador;
+        public ValidadorCPFTests()
         {
-            // Remove caracteres não numéricos
-            cpf = new string(cpf.Where(char.IsDigit).ToArray());
-
-            if (cpf.Length != 11 || cpf.Distinct().Count() == 1)
-                return false;
-
-            int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-            int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-
-            string tempCpf = cpf.Substring(0, 9);
-            int soma = 0;
-
-            for (int i = 0; i < 9; i++)
-                soma += int.Parse(tempCpf[i].ToString()) * multiplicador1[i];
-
-            int resto = soma % 11;
-            resto = resto < 2 ? 0 : 11 - resto;
-            string digito = resto.ToString();
-
-            tempCpf += digito;
-            soma = 0;
-
-            for (int i = 0; i < 10; i++)
-                soma += int.Parse(tempCpf[i].ToString()) * multiplicador2[i];
-
-            resto = soma % 11;
-            resto = resto < 2 ? 0 : 11 - resto;
-            digito += resto.ToString();
-
-            return cpf.EndsWith(digito);
+            _validador = new ValidadorCPF();
         }
 
         [Fact]
-        public void TestarCPF()
+
+        public void DeveRetornarTrueParaCpfValido()
         {
+
+
             // Arrange
-            string cpfValido = "12345678909";   // CPF válido fictício
-            string cpfInvalido = "12345678900"; // CPF inválido
+            string cpfValido = "47472168807";
+            //int cpfinvalido  = "234236423643;
 
-            // Act & Assert
-            Assert.True(ValidarCPF(cpfValido));
-            Assert.False(ValidarCPF(cpfInvalido));
+            // Act
+            bool resultado = _validador.Validar(cpfValido);
+
+            // Assert
+            Assert.True(resultado);
+
+
         }
+
+        [Fact]
+
+        public void DeveRetornarFalseParaCpfinvalidado()
+        {
+
+
+            // Arrange
+            //string cpfValido = "11144477735";
+            string cpfinvalido = "234236423643";
+
+            // Act
+            bool resultado = _validador.Validar(cpfinvalido);
+
+            // Assert
+            Assert.False(resultado);
+
+        }
+
+        [Theory]
+        [InlineData("24024557910")]
+        [InlineData("24024557907")]
+
+        public void TestaCPFDeveRetornarFalse(string cpf) { 
+        
+            //Arrange - 
+            
+            // Act
+
+            bool resultado = _validador.Validar(cpf);
+
+            // Assert
+
+            Assert.False(resultado);
+
+        }
+
+       
+
+
+
     }
-
 }
-

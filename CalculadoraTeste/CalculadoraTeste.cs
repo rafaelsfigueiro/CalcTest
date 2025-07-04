@@ -6,7 +6,7 @@ namespace CalculadoraTeste
     public class CalculadoraTeste
     {
 
-        static Calculadora _calc;
+        private Calculadora _calc;
         
         public CalculadoraTeste()
         {
@@ -15,7 +15,7 @@ namespace CalculadoraTeste
 
         
         [Fact]
-        public  static void testaAdicaoValor() //metodologia a.a.a
+        public void testaAdicaoValorDeveRetornar15() //metodologia a.a.a
         {
             // arrange 
             int num1 = 10;
@@ -45,11 +45,29 @@ namespace CalculadoraTeste
         [Fact]
         public void Dividir()
         {
-            int div1 = 7;
-            int div2 = 2;
+            //int div1 = 7;
+            //int div2 = 2;
 
 
         }
+
+        [Theory]
+        [InlineData(10,5,15)]
+        [InlineData(7, 10, 17)]
+            
+
+        public void testaadicaoDeRetornarExpectativa(int a, int b, int Expectativa)
+        {
+            
+
+            int resultado = _calc.Adicao(a, b);
+
+            Assert.Equal(Expectativa, resultado);
+        }
+
+
+
+
 
     }
 }
